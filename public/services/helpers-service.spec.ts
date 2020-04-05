@@ -1,5 +1,6 @@
 import { Card } from './cards-service';
 import * as Helpers from './helpers-service';
+import * as Enums from '../../resources/constants/enums';
 
 describe('isKasu', () => {
   describe('カス札が10枚ある場合', () => {
@@ -135,6 +136,34 @@ describe('isTane', () => {
 
     it('false を返すこと', () => {
       const actual = Helpers.isTane(<Array<Card>>cards);
+      expect(actual).toBeFalsy();
+    });
+  });
+});
+
+describe('isAotan', () => {
+  describe('牡丹・菊・紅葉の短冊を含む場合', () => {
+    const cards = [
+      { name: '青短', flowerType: '牡丹', point: 5 },
+      { name: '青短', flowerType: '菊', point: 5 },
+      { name: '青短', flowerType: '紅葉', point: 5 },
+    ];
+
+    it('true を返すこと', () => {
+      const actual = Helpers.isAotan(<Array<Card>>cards);
+      expect(actual).toBeTruthy();
+    });
+  });
+
+  describe('牡丹・菊・紅葉のどれかひとつの短冊でも欠ける場合', () => {
+    const cards = [
+      { name: '青短', flowerType: '牡丹', point: 5 },
+      { name: '青短', flowerType: '菊', point: 5 },
+      { name: '鹿', flowerType: '紅葉', point: 10 },
+    ];
+
+    it('false を返すこと', () => {
+      const actual = Helpers.isAotan(<Array<Card>>cards);
       expect(actual).toBeFalsy();
     });
   });

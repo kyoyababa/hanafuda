@@ -24,8 +24,19 @@ function checkMatchedBasicYaku(cards: Array<Card>, yaku: 'Kasu' | 'Tanzaku' | 'T
   return filteredCards.length >= filterCardsLength();
 }
 
+function isKikunisakazuki(card: Card): boolean {
+  return card.flowerType === Enums.FlowerTypes.Kiku.name && card.point === 10;
+}
+
+function isKasuWithKikunisakazuki(cards: Array<Card>): boolean {
+  const filteredCards = cards.filter(c => {
+    return c.point === 1 || isKikunisakazuki(c);
+  });
+  return filteredCards.length >= 10;
+}
+
 export function isKasu(cards: Array<Card>): boolean {
-  return checkMatchedBasicYaku(cards, 'Kasu');
+  return checkMatchedBasicYaku(cards, 'Kasu') || isKasuWithKikunisakazuki(cards);
 }
 
 export function isTanzaku(cards: Array<Card>): boolean {

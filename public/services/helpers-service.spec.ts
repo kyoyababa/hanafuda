@@ -276,3 +276,35 @@ describe('isTsukimideippai', () => {
     });
   });
 });
+
+describe('isGoko', () => {
+  describe('5光札をすべて含む場合', () => {
+    const cards = [
+      { name: '鶴', flowerType: '松', point: 20 },
+      { name: '幕', flowerType: '桜', point: 20 },
+      { name: '月', flowerType: '芒', point: 20 },
+      { name: '小野道風', flowerType: '柳', point: 20 },
+      { name: '鳳凰', flowerType: '桐', point: 20 },
+    ];
+
+    it('true を返すこと', () => {
+      const actual = Helpers.isGoko(<Array<Card>>cards);
+      expect(actual).toBeTruthy();
+    });
+  });
+
+  describe('5光札が1枚でも欠ける場合', () => {
+    const cards = [
+      { name: '鶴', flowerType: '松', point: 20 },
+      { name: '幕', flowerType: '桜', point: 20 },
+      { name: '月', flowerType: '芒', point: 20 },
+      { name: '小野道風', flowerType: '柳', point: 20 },
+      { name: 'カス.1', flowerType: '桐', point: 1 },
+    ];
+
+    it('false を返すこと', () => {
+      const actual = Helpers.isGoko(<Array<Card>>cards);
+      expect(actual).toBeFalsy();
+    });
+  });
+});

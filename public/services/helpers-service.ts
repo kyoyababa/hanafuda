@@ -100,3 +100,8 @@ export function isHanamideippai(cards: Array<Card>): boolean {
 export function isTsukimideippai(cards: Array<Card>): boolean {
   return checkMatchedFivePointsYaku(cards, 'Tsukimideippai');
 }
+
+export function isGoko(cards: Array<Card>): boolean {
+  const filteredCards = cards.filter(c => c.point === 20);
+  return filteredCards.length === 5;
+}

@@ -71,3 +71,25 @@ export function isInoshikacho(cards: Array<Card>): boolean {
     return cards.some(card => card.flowerType === required.name && card.point === 10);
   });
 }
+
+export function isHanamideippai(cards: Array<Card>): boolean {
+  const requiredCards = [
+    { flowerType: Enums.FlowerTypes.Sakura, point: 20 },
+    { flowerType: Enums.FlowerTypes.Kiku, point: 10 },
+  ];
+
+  return requiredCards.every(required => {
+    return cards.some(card => card.flowerType === required.flowerType.name && card.point === required.point);
+  });
+}
+
+export function isTsukimideippai(cards: Array<Card>): boolean {
+  const requiredCards = [
+    { flowerType: Enums.FlowerTypes.Susuki, point: 20 },
+    { flowerType: Enums.FlowerTypes.Kiku, point: 10 },
+  ];
+
+  return requiredCards.every(required => {
+    return cards.some(card => card.flowerType === required.flowerType.name && card.point === required.point);
+  });
+}

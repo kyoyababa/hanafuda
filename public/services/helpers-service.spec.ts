@@ -224,3 +224,55 @@ describe('isInoshikacho', () => {
     });
   });
 });
+
+describe('isHanamideippai', () => {
+  describe('桜に幕・菊に盃の2枚を含む場合', () => {
+    const cards = [
+      { name: '幕', flowerType: '桜', point: 20 },
+      { name: '盃', flowerType: '菊', point: 10 },
+    ];
+
+    it('true を返すこと', () => {
+      const actual = Helpers.isHanamideippai(<Array<Card>>cards);
+      expect(actual).toBeTruthy();
+    });
+  });
+
+  describe('桜に幕・菊に盃のいずれかしか含まない場合', () => {
+    const cards = [
+      { name: '幕', flowerType: '桜', point: 20 },
+      { name: '鹿', flowerType: '紅葉', point: 10 },
+    ];
+
+    it('false を返すこと', () => {
+      const actual = Helpers.isHanamideippai(<Array<Card>>cards);
+      expect(actual).toBeFalsy();
+    });
+  });
+});
+
+describe('isTsukimideippai', () => {
+  describe('芒に月・菊に盃の2枚を含む場合', () => {
+    const cards = [
+      { name: '月', flowerType: '芒', point: 20 },
+      { name: '盃', flowerType: '菊', point: 10 },
+    ];
+
+    it('true を返すこと', () => {
+      const actual = Helpers.isTsukimideippai(<Array<Card>>cards);
+      expect(actual).toBeTruthy();
+    });
+  });
+
+  describe('桜に幕・菊に盃のいずれかしか含まない場合', () => {
+    const cards = [
+      { name: '月', flowerType: '芒', point: 20 },
+      { name: '鹿', flowerType: '紅葉', point: 10 },
+    ];
+
+    it('false を返すこと', () => {
+      const actual = Helpers.isTsukimideippai(<Array<Card>>cards);
+      expect(actual).toBeFalsy();
+    });
+  });
+});

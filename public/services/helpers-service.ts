@@ -47,3 +47,15 @@ export function isAotan(cards: Array<Card>): boolean {
     return cards.some(card => card.flowerType === required.name && card.point === 5);
   });
 }
+
+export function isAkatan(cards: Array<Card>): boolean {
+  const requiredCards = [
+    Enums.FlowerTypes.Ume,
+    Enums.FlowerTypes.Sakura,
+    Enums.FlowerTypes.Matsu,
+  ];
+
+  return requiredCards.every(required => {
+    return cards.some(card => card.flowerType === required.name && card.point === 5);
+  });
+}

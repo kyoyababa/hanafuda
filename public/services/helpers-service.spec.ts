@@ -168,3 +168,31 @@ describe('isAotan', () => {
     });
   });
 });
+
+describe('isAkatan', () => {
+  describe('梅・桜・松の短冊を含む場合', () => {
+    const cards = [
+      { name: '赤短', flowerType: '梅', point: 5 },
+      { name: '赤短', flowerType: '桜', point: 5 },
+      { name: '赤短', flowerType: '松', point: 5 },
+    ];
+
+    it('true を返すこと', () => {
+      const actual = Helpers.isAkatan(<Array<Card>>cards);
+      expect(actual).toBeTruthy();
+    });
+  });
+
+  describe('牡丹・菊・紅葉のどれかひとつの短冊でも欠ける場合', () => {
+    const cards = [
+      { name: '赤短', flowerType: '梅', point: 5 },
+      { name: '赤短', flowerType: '桜', point: 5 },
+      { name: '鶴', flowerType: '松', point: 20 },
+    ];
+
+    it('false を返すこと', () => {
+      const actual = Helpers.isAkatan(<Array<Card>>cards);
+      expect(actual).toBeFalsy();
+    });
+  });
+});

@@ -105,3 +105,13 @@ export function isGoko(cards: Array<Card>): boolean {
   const filteredCards = cards.filter(c => c.point === 20);
   return filteredCards.length === 5;
 }
+
+export function isShiko(cards: Array<Card>): boolean {
+  const filteredCards = cards.filter(c => c.point === 20);
+  return filteredCards.length === 4;
+}
+
+export function isSanko(cards: Array<Card>): boolean {
+  const filteredCards = cards.filter(c => c.point === 20 && c.flowerType !== Enums.FlowerTypes.Yanagi.name);
+  return filteredCards.length === 3;
+}

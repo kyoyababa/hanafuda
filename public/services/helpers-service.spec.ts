@@ -308,3 +308,74 @@ describe('isGoko', () => {
     });
   });
 });
+
+describe('isShiko', () => {
+  describe('5光札を4枚含む場合', () => {
+    const cards = [
+      { name: '鶴', flowerType: '松', point: 20 },
+      { name: '幕', flowerType: '桜', point: 20 },
+      { name: '月', flowerType: '芒', point: 20 },
+      { name: '小野道風', flowerType: '柳', point: 20 },
+    ];
+
+    it('true を返すこと', () => {
+      const actual = Helpers.isShiko(<Array<Card>>cards);
+      expect(actual).toBeTruthy();
+    });
+  });
+
+  describe('5光札が3枚以下の場合', () => {
+    const cards = [
+      { name: '鶴', flowerType: '松', point: 20 },
+      { name: '幕', flowerType: '桜', point: 20 },
+      { name: '月', flowerType: '芒', point: 20 },
+      { name: 'カス.1', flowerType: '桐', point: 1 },
+    ];
+
+    it('false を返すこと', () => {
+      const actual = Helpers.isShiko(<Array<Card>>cards);
+      expect(actual).toBeFalsy();
+    });
+  });
+});
+
+describe('isSanko', () => {
+  describe('5光札を3枚含み、いずれも柳に小野道風ではない場合', () => {
+    const cards = [
+      { name: '鶴', flowerType: '松', point: 20 },
+      { name: '幕', flowerType: '桜', point: 20 },
+      { name: '月', flowerType: '芒', point: 20 },
+    ];
+
+    it('true を返すこと', () => {
+      const actual = Helpers.isSanko(<Array<Card>>cards);
+      expect(actual).toBeTruthy();
+    });
+  });
+
+  describe('5光札を3枚含むが、柳に小野道風が含まれる場合', () => {
+    const cards = [
+      { name: '鶴', flowerType: '松', point: 20 },
+      { name: '幕', flowerType: '桜', point: 20 },
+      { name: '小野道風', flowerType: '柳', point: 20 },
+    ];
+
+    it('false を返すこと', () => {
+      const actual = Helpers.isSanko(<Array<Card>>cards);
+      expect(actual).toBeFalsy();
+    });
+  });
+
+  describe('5光札が2枚以下の場合', () => {
+    const cards = [
+      { name: '鶴', flowerType: '松', point: 20 },
+      { name: '幕', flowerType: '桜', point: 20 },
+      { name: 'カス.1', flowerType: '桐', point: 1 },
+    ];
+
+    it('false を返すこと', () => {
+      const actual = Helpers.isSanko(<Array<Card>>cards);
+      expect(actual).toBeFalsy();
+    });
+  });
+});

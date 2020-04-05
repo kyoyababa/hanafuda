@@ -1,0 +1,43 @@
+// For block elements.
+$cs-wrapper-width: 960px;
+$cs-header-height: 50px;
+$cs-footer-height: 50px;
+
+
+// For base colours.
+$basecolor-primary: red;
+$basecolor-secondary: purple;
+$basecolor-valid: green;
+$basecolor-invalid: red;
+
+
+// For foreground colours.
+$fgcolor-normal: #222222;
+$fgcolor-darkbg: #FFFFFF;
+$fgcolor-primary: $basecolor-primary;
+$fgcolor-secondary: $basecolor-secondary;
+$fgcolor-link: skyblue;
+$fgcolor-midpriority: #666666;
+$fgcolor-lowpriority: #AAAAAA;
+$fgcolor-valid: $basecolor-valid;
+$fgcolor-invalid: $basecolor-invalid;
+
+
+// For background colours.
+$bgcolor-normal: #FFFFFF;
+$bgcolor-darkbg: #222222;
+$bgcolor-overlay-base: #000000;
+$bgcolor-primary: $basecolor-primary;
+$bgcolor-secondary: $basecolor-secondary;
+
+
+// For border colours.
+$bdcolor-normal: #EEEEEE;
+$bdcolor-darkbg: #FFFFFF;
+$bdcolor-primary: $basecolor-primary;
+$bdcolor-secondary: $basecolor-secondary;
+
+
+// For border styles.
+$bdradius-normal: 4px;
+$bdradius-circle: 100%;

@@ -1,0 +1,23 @@
+.cs-wrapper {
+  width: $cs-wrapper-width;
+  margin: 0 auto;
+}
+
+.cs-buttons-list {
+  display: flex;
+  justify-content: center;
+
+  > li > button {
+    cursor: pointer;
+    position: relative;
+    margin-left: 0.75em;
+    padding: 6px 10px;
+    border: 1px solid $bdcolor-normal;
+    background-color: $bgcolor-normal;
+    background-image: linear-gradient(to bottom, darken($bgcolor-primary, 10%), darken($bgcolor-primary, 20%));
+    border-radius: $bdradius-normal;
+    box-shadow: 0 0 4px $bdcolor-normal;
+    color: $fgcolor-darkbg;
+    transition: background-color background-image 300ms ease-in;
+  }
+}

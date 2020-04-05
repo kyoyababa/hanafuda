@@ -59,3 +59,15 @@ export function isAkatan(cards: Array<Card>): boolean {
     return cards.some(card => card.flowerType === required.name && card.point === 5);
   });
 }
+
+export function isInoshikacho(cards: Array<Card>): boolean {
+  const requiredCards = [
+    Enums.FlowerTypes.Hagi,
+    Enums.FlowerTypes.Momiji,
+    Enums.FlowerTypes.Botan,
+  ];
+
+  return requiredCards.every(required => {
+    return cards.some(card => card.flowerType === required.name && card.point === 10);
+  });
+}

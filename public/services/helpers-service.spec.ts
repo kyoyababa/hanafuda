@@ -196,3 +196,31 @@ describe('isAkatan', () => {
     });
   });
 });
+
+describe('isInoshikacho', () => {
+  describe('萩・紅葉・牡丹のタネ札を含む場合', () => {
+    const cards = [
+      { name: '猪', flowerType: '萩', point: 10 },
+      { name: '鹿', flowerType: '紅葉', point: 10 },
+      { name: '蝶', flowerType: '牡丹', point: 10 },
+    ];
+
+    it('true を返すこと', () => {
+      const actual = Helpers.isInoshikacho(<Array<Card>>cards);
+      expect(actual).toBeTruthy();
+    });
+  });
+
+  describe('萩・紅葉・牡丹のどれかひとつのタネ札でも欠ける場合', () => {
+    const cards = [
+      { name: '猪', flowerType: '萩', point: 10 },
+      { name: '鹿', flowerType: '紅葉', point: 10 },
+      { name: '八橋', flowerType: '菖蒲', point: 10 },
+    ];
+
+    it('false を返すこと', () => {
+      const actual = Helpers.isInoshikacho(<Array<Card>>cards);
+      expect(actual).toBeFalsy();
+    });
+  });
+});

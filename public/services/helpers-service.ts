@@ -11,3 +11,9 @@ export function isTanzaku(cards: Array<Card>): boolean {
   const tanzakuCards = cards.filter(c => c.point === 5);
   return tanzakuCards.length >= 5;
 }
+
+export function isTane(cards: Array<Card>): boolean {
+  if (cards.length < 5) return false;
+  const taneCards = cards.filter(c => c.point === 10);
+  return taneCards.length >= 5;
+}

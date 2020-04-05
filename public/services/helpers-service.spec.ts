@@ -80,7 +80,7 @@ describe('isTanzaku', () => {
     ];
 
     it('false を返すこと', () => {
-      const actual = Helpers.isKasu(<Array<Card>>cards);
+      const actual = Helpers.isTanzaku(<Array<Card>>cards);
       expect(actual).toBeFalsy();
     });
   });
@@ -91,7 +91,50 @@ describe('isTanzaku', () => {
     ];
 
     it('false を返すこと', () => {
-      const actual = Helpers.isKasu(<Array<Card>>cards);
+      const actual = Helpers.isTanzaku(<Array<Card>>cards);
+      expect(actual).toBeFalsy();
+    });
+  });
+});
+
+describe('isTane', () => {
+  describe('10点札が5枚ある場合', () => {
+    const cards = [
+      { name: '鴬', flowerType: '梅', point: 10 },
+      { name: '不如帰', flowerType: '藤', point: 10 },
+      { name: '八橋', flowerType: '菖蒲', point: 10 },
+      { name: '蝶', flowerType: '牡丹', point: 10 },
+      { name: '猪', flowerType: '萩', point: 10 },
+    ];
+
+    it('true を返すこと', () => {
+      const actual = Helpers.isTane(<Array<Card>>cards);
+      expect(actual).toBeTruthy();
+    });
+  });
+
+  describe('10点札以外が5枚ある場合', () => {
+    const cards = [
+      { name: '鶴', flowerType: '松', point: 20 },
+      { name: '赤短', flowerType: '松', point: 5 },
+      { name: 'カス.1', flowerType: '松', point: 1 },
+      { name: 'カス.2', flowerType: '松', point: 1 },
+      { name: '赤短', flowerType: '梅', point: 5 },
+    ];
+
+    it('false を返すこと', () => {
+      const actual = Helpers.isTane(<Array<Card>>cards);
+      expect(actual).toBeFalsy();
+    });
+  });
+
+  describe('札が5枚未満の場合', () => {
+    const cards = [
+      { name: 'カス.1', flowerType: '松', point: 1 },
+    ];
+
+    it('false を返すこと', () => {
+      const actual = Helpers.isTane(<Array<Card>>cards);
       expect(actual).toBeFalsy();
     });
   });

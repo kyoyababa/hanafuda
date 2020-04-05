@@ -1,5 +1,5 @@
 export type FlowerType = '松' | '梅' | '桜' | '藤' | '菖蒲' | '牡丹' | '萩' | '芒' | '菊' | '紅葉' | '柳' | '桐';
-type PointType = 20 | 10 | 5 | 1;
+export type PointType = 20 | 10 | 5 | 1;
 export type Card = {
   name: string;
   flowerType: FlowerType;

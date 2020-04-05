@@ -1,5 +1,5 @@
 import * as Enums from '../../resources/constants/enums';
-import { Card } from './cards-service';
+import { Card, PointType } from './cards-service';
 
 function checkMatchedBasicYaku(cards: Array<Card>, yaku: 'Kasu' | 'Tanzaku' | 'Tane') {
   const filterPoint = (): number => {
@@ -36,60 +36,67 @@ export function isTane(cards: Array<Card>): boolean {
   return checkMatchedBasicYaku(cards, 'Tane');
 }
 
-export function isAotan(cards: Array<Card>): boolean {
-  const requiredCards = [
-    Enums.FlowerTypes.Botan,
-    Enums.FlowerTypes.Kiku,
-    Enums.FlowerTypes.Momiji,
-  ];
+type FivePointsYaku = 'Aotan' | 'Akatan' | 'Inoshikacho' | 'Hanamideippai' | 'Tsukimideippai';
 
-  return requiredCards.every(required => {
-    return cards.some(card => card.flowerType === required.name && card.point === 5);
+function checkMatchedFivePointsYaku(cards: Array<Card>, yaku: FivePointsYaku): boolean {
+  interface RequiredCard {
+    flowerType: string;
+    point: PointType;
+  };
+
+  const requiredCards = (): Array<RequiredCard> => {
+    switch(yaku) {
+      case 'Aotan': return [
+        { flowerType: Enums.FlowerTypes.Botan.name, point: 5 },
+        { flowerType: Enums.FlowerTypes.Kiku.name, point: 5 },
+        { flowerType: Enums.FlowerTypes.Momiji.name, point: 5 },
+      ];
+
+      case 'Akatan': return [
+        { flowerType: Enums.FlowerTypes.Ume.name, point: 5 },
+        { flowerType: Enums.FlowerTypes.Sakura.name, point: 5 },
+        { flowerType: Enums.FlowerTypes.Matsu.name, point: 5 },
+      ];
+
+      case 'Inoshikacho': return [
+        { flowerType: Enums.FlowerTypes.Hagi.name, point: 10 },
+        { flowerType: Enums.FlowerTypes.Momiji.name, point: 10 },
+        { flowerType: Enums.FlowerTypes.Botan.name, point: 10 },
+      ];
+
+      case 'Hanamideippai': return [
+        { flowerType: Enums.FlowerTypes.Sakura.name, point: 20 },
+        { flowerType: Enums.FlowerTypes.Kiku.name, point: 10 },
+      ];
+
+      case 'Tsukimideippai': return [
+        { flowerType: Enums.FlowerTypes.Susuki.name, point: 20 },
+        { flowerType: Enums.FlowerTypes.Kiku.name, point: 10 },
+      ]
+    }
+  };
+
+  return requiredCards().every(required => {
+    return cards.some(card => card.flowerType === required.flowerType && card.point === required.point);
   });
+}
+
+export function isAotan(cards: Array<Card>): boolean {
+  return checkMatchedFivePointsYaku(cards, 'Aotan');
 }
 
 export function isAkatan(cards: Array<Card>): boolean {
-  const requiredCards = [
-    Enums.FlowerTypes.Ume,
-    Enums.FlowerTypes.Sakura,
-    Enums.FlowerTypes.Matsu,
-  ];
-
-  return requiredCards.every(required => {
-    return cards.some(card => card.flowerType === required.name && card.point === 5);
-  });
+  return checkMatchedFivePointsYaku(cards, 'Akatan');
 }
 
 export function isInoshikacho(cards: Array<Card>): boolean {
-  const requiredCards = [
-    Enums.FlowerTypes.Hagi,
-    Enums.FlowerTypes.Momiji,
-    Enums.FlowerTypes.Botan,
-  ];
-
-  return requiredCards.every(required => {
-    return cards.some(card => card.flowerType === required.name && card.point === 10);
-  });
+  return checkMatchedFivePointsYaku(cards, 'Inoshikacho');
 }
 
 export function isHanamideippai(cards: Array<Card>): boolean {
-  const requiredCards = [
-    { flowerType: Enums.FlowerTypes.Sakura, point: 20 },
-    { flowerType: Enums.FlowerTypes.Kiku, point: 10 },
-  ];
-
-  return requiredCards.every(required => {
-    return cards.some(card => card.flowerType === required.flowerType.name && card.point === required.point);
-  });
+  return checkMatchedFivePointsYaku(cards, 'Hanamideippai');
 }
 
 export function isTsukimideippai(cards: Array<Card>): boolean {
-  const requiredCards = [
-    { flowerType: Enums.FlowerTypes.Susuki, point: 20 },
-    { flowerType: Enums.FlowerTypes.Kiku, point: 10 },
-  ];
-
-  return requiredCards.every(required => {
-    return cards.some(card => card.flowerType === required.flowerType.name && card.point === required.point);
-  });
+  return checkMatchedFivePointsYaku(cards, 'Tsukimideippai');
 }

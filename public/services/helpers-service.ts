@@ -37,14 +37,13 @@ export function isTane(cards: Array<Card>): boolean {
 }
 
 export function isAotan(cards: Array<Card>): boolean {
-  const hasBotanAotan = cards.some(c => {
-    return c.flowerType === Enums.FlowerTypes.Botan.name && c.point === 5;
+  const requiredCards = [
+    Enums.FlowerTypes.Botan,
+    Enums.FlowerTypes.Kiku,
+    Enums.FlowerTypes.Momiji,
+  ];
+
+  return requiredCards.every(required => {
+    return cards.some(card => card.flowerType === required.name && card.point === 5);
   });
-  const hasKikuAotan = cards.some(c => {
-    return c.flowerType === Enums.FlowerTypes.Kiku.name && c.point === 5;
-  });
-  const hasMomijiAotan = cards.some(c => {
-    return c.flowerType === Enums.FlowerTypes.Momiji.name && c.point === 5;
-  });
-  return hasBotanAotan && hasKikuAotan && hasMomijiAotan;
 }

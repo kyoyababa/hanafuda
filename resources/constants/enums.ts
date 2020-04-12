@@ -1,10 +1,12 @@
 import { FlowerType } from '../../public/services/cards-service';
 
 interface FlowerTypeEnum {
-  [key: string]: {
-    code: string;
-    name: FlowerType;
-  }
+  [key: string]: FlowerTypeEnumObject;
+}
+
+interface FlowerTypeEnumObject {
+  code: string;
+  name: FlowerType;
 }
 
 export const FlowerTypes: FlowerTypeEnum = {
@@ -22,7 +24,7 @@ export const FlowerTypes: FlowerTypeEnum = {
   Kiri: { code: 'Kiri', name: '桐'},
 };
 
-export const flowerTypesValues = () => [
+export const flowerTypesValues: Array<FlowerTypeEnumObject> = [
   FlowerTypes.Matsu,
   FlowerTypes.Ume,
   FlowerTypes.Sakura,
@@ -42,11 +44,13 @@ export type Yaku = 'Kasu' | 'Tanzaku' | 'Tane' | 'Aotan' | 'Akatan' |
                    'Goko' | 'Shiko' | 'AmeiriShiko' | 'Sanko';
 
 interface YakuEnum {
-  [key: string]: {
-    code: Yaku;
-    name: string;
-    point: number;
-  }
+  [key: string]: YakuEnumObject;
+}
+
+interface YakuEnumObject {
+  code: Yaku;
+  name: string;
+  point: number;
 }
 
 export const Yakus: YakuEnum = {
@@ -63,3 +67,18 @@ export const Yakus: YakuEnum = {
   AmeiriShiko: { code: 'AmeiriShiko', name: '雨入り四光', point: 7 },
   Sanko: { code: 'Sanko', name: '三光', point: 5 },
 }
+
+export const yakusValues: Array<YakuEnumObject> = [
+  Yakus.Kasu,
+  Yakus.Tanzaku,
+  Yakus.Tane,
+  Yakus.Aotan,
+  Yakus.Akatan,
+  Yakus.Inoshikacho,
+  Yakus.Hanamideippai,
+  Yakus.Tsukimideippai,
+  Yakus.Goko,
+  Yakus.Shiko,
+  Yakus.AmeiriShiko,
+  Yakus.Sanko,
+];

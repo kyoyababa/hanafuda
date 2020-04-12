@@ -3,7 +3,7 @@ import { FlowerType } from '../../public/services/cards-service';
 interface FlowerTypeEnum {
   [key: string]: {
     code: string;
-    name: FlowerType
+    name: FlowerType;
   }
 }
 
@@ -36,3 +36,30 @@ export const flowerTypesValues = () => [
   FlowerTypes.Yanagi,
   FlowerTypes.Kiri,
 ];
+
+export type Yaku = 'Kasu' | 'Tanzaku' | 'Tane' | 'Aotan' | 'Akatan' |
+                   'Inoshikacho' | 'Hanamideippai' | 'Tsukimideippai' |
+                   'Goko' | 'Shiko' | 'AmeiriShiko' | 'Sanko';
+
+interface YakuEnum {
+  [key: string]: {
+    code: Yaku;
+    name: string;
+    point: number;
+  }
+}
+
+export const Yakus: YakuEnum = {
+  Kasu: { code: 'Kasu', name: 'カス', point: 1 },
+  Tanzaku: { code: 'Tanzaku', name: 'タン', point: 1 },
+  Tane: { code: 'Tane', name: 'タネ', point: 1 },
+  Aotan: { code: 'Aotan', name: '青短', point: 5 },
+  Akatan: { code: 'Akatan', name: '赤短', point: 5 },
+  Inoshikacho: { code: 'Inoshikacho', name: '猪鹿蝶', point: 5 },
+  Hanamideippai: { code: 'Hanamideippai', name: '花見で一杯', point: 5 },
+  Tsukimideippai: { code: 'Tsukimideippai', name: '月見で一杯', point: 5 },
+  Goko: { code: 'Goko', name: '五光', point: 10 },
+  Shiko: { code: 'Shiko', name: '四光', point: 8 },
+  AmeiriShiko: { code: 'AmeiriShiko', name: '雨入り四光', point: 7 },
+  Sanko: { code: 'Sanko', name: '三光', point: 5 },
+}

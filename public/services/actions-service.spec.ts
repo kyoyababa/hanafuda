@@ -167,12 +167,26 @@ describe('generateYakuByCurrentCards', () => {
     });
   });
 
-  describe('5光札を4枚含む場合', () => {
+  describe('5光札を4枚含むが、そのうち1つは柳に小野道風である場合', () => {
     const cards = [
       { name: '鶴', flowerType: '松', point: 20 },
       { name: '幕', flowerType: '桜', point: 20 },
       { name: '月', flowerType: '芒', point: 20 },
       { name: '小野道風', flowerType: '柳', point: 20 },
+    ];
+
+    it('"AmeiriShiko" を返すこと', () => {
+      const actual = generateYakuByCurrentCards(<Array<Card>>cards);
+      expect(actual).toEqual(['AmeiriShiko']);
+    });
+  });
+
+  describe('5光札を4枚含み、かつ柳に小野道風が含まれない場合', () => {
+    const cards = [
+      { name: '鶴', flowerType: '松', point: 20 },
+      { name: '幕', flowerType: '桜', point: 20 },
+      { name: '月', flowerType: '芒', point: 20 },
+      { name: '鳳凰', flowerType: '桐', point: 20 },
     ];
 
     it('"Shiko" を返すこと', () => {

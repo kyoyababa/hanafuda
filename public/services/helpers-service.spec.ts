@@ -329,7 +329,51 @@ describe('isGoko', () => {
 });
 
 describe('isShiko', () => {
-  describe('5光札を4枚含む場合', () => {
+  describe('5光札を4枚含み、かつ柳に小野道風を含まない場合', () => {
+    const cards = [
+      { name: '鶴', flowerType: '松', point: 20 },
+      { name: '幕', flowerType: '桜', point: 20 },
+      { name: '月', flowerType: '芒', point: 20 },
+      { name: '鳳凰', flowerType: '桐', point: 20 },
+    ];
+
+    it('true を返すこと', () => {
+      const actual = Helpers.isShiko(<Array<Card>>cards);
+      expect(actual).toBeTruthy();
+    });
+  });
+
+  describe('5光札を4枚含み、かつ柳に小野道風を含む場合', () => {
+    const cards = [
+      { name: '鶴', flowerType: '松', point: 20 },
+      { name: '幕', flowerType: '桜', point: 20 },
+      { name: '月', flowerType: '芒', point: 20 },
+      { name: '小野道風', flowerType: '柳', point: 20 },
+    ];
+
+    it('false を返すこと', () => {
+      const actual = Helpers.isShiko(<Array<Card>>cards);
+      expect(actual).toBeFalsy();
+    });
+  });
+
+  describe('5光札が3枚以下の場合', () => {
+    const cards = [
+      { name: '鶴', flowerType: '松', point: 20 },
+      { name: '幕', flowerType: '桜', point: 20 },
+      { name: '月', flowerType: '芒', point: 20 },
+      { name: 'カス.1', flowerType: '桐', point: 1 },
+    ];
+
+    it('false を返すこと', () => {
+      const actual = Helpers.isShiko(<Array<Card>>cards);
+      expect(actual).toBeFalsy();
+    });
+  });
+});
+
+describe('isAmeiriShiko', () => {
+  describe('5光札を4枚含み、かつ柳に小野道風を含む場合', () => {
     const cards = [
       { name: '鶴', flowerType: '松', point: 20 },
       { name: '幕', flowerType: '桜', point: 20 },
@@ -338,8 +382,22 @@ describe('isShiko', () => {
     ];
 
     it('true を返すこと', () => {
-      const actual = Helpers.isShiko(<Array<Card>>cards);
+      const actual = Helpers.isAmeiriShiko(<Array<Card>>cards);
       expect(actual).toBeTruthy();
+    });
+  });
+
+  describe('5光札を4枚含み、かつ柳に小野道風を含まない場合', () => {
+    const cards = [
+      { name: '鶴', flowerType: '松', point: 20 },
+      { name: '幕', flowerType: '桜', point: 20 },
+      { name: '月', flowerType: '芒', point: 20 },
+      { name: '鳳凰', flowerType: '桐', point: 20 },
+    ];
+
+    it('false を返すこと', () => {
+      const actual = Helpers.isAmeiriShiko(<Array<Card>>cards);
+      expect(actual).toBeFalsy();
     });
   });
 

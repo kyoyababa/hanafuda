@@ -112,14 +112,24 @@ export function isTsukimideippai(cards: Array<Card>): boolean {
   return checkMatchedFivePointsYaku(cards, 'Tsukimideippai');
 }
 
+function hikariCardsCount(cards: Array<Card>): number {
+  return cards.filter(c => c.point === 20).length;
+}
+
 export function isGoko(cards: Array<Card>): boolean {
-  const filteredCards = cards.filter(c => c.point === 20);
-  return filteredCards.length === 5;
+  return hikariCardsCount(cards) === 5;
+}
+
+function hasYanagiNiOnonomichikaze(cards: Array<Card>): boolean {
+  return cards.some(c => c.point === 20 && c.flowerType === Enums.FlowerTypes.Yanagi.name);
 }
 
 export function isShiko(cards: Array<Card>): boolean {
-  const filteredCards = cards.filter(c => c.point === 20);
-  return filteredCards.length === 4;
+  return hikariCardsCount(cards) === 4 && !hasYanagiNiOnonomichikaze(cards);
+}
+
+export function isAmeiriShiko(cards: Array<Card>): boolean {
+  return hikariCardsCount(cards) === 4 && hasYanagiNiOnonomichikaze(cards);
 }
 
 export function isSanko(cards: Array<Card>): boolean {

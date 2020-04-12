@@ -2,8 +2,8 @@ import * as Enums from '../../resources/constants/enums';
 import { Card } from './cards-service';
 import * as Helpers from './helpers-service';
 
-type Yaku = 'Kasu' | 'Kasu' | 'Tanzaku' | 'Tane' | 'Aotan' | 'Akatan' |
-            'Inoshikacho' | 'Hanamideippai' | 'Tsukimideippai' | 'Goko' | 'Shiko' | 'Sanko';
+type Yaku = 'Kasu' | 'Tanzaku' | 'Tane' | 'Aotan' | 'Akatan' | 'Inoshikacho' |
+            'Hanamideippai' | 'Tsukimideippai' | 'Goko' | 'Shiko' | 'Sanko';
 
 export function generateYakuByCurrentCards(cards: Array<Card>): Array<Yaku> {
   const check20PointCardsYaku = () => {
@@ -33,88 +33,73 @@ export function generateYakuByCurrentCards(cards: Array<Card>): Array<Yaku> {
   return <Array<Yaku>>yakus.filter(y => y !== null);
 }
 
+function kasuCardsCount(cards: Array<Card>): number {
+  return cards.filter(c => c.point === 1 || Helpers.isKikunisakazuki(c)).length;
+}
+
+function tanzakuCardsCount(cards: Array<Card>): number {
+  return cards.filter(c => c.point === 5).length;
+}
+
+function taneCardsCount(cards: Array<Card>): number {
+  return cards.filter(c => c.point === 10).length;
+}
+
+function isIncludeOnonoMichikaze(cards: Array<Card>): boolean {
+  return cards.some(c => c.point === 20 && c.flowerType === Enums.FlowerTypes.Yanagi.name);
+}
+
 export function calculatePointsByYakus(cards: Array<Card>): number {
-  let points = 0;
-
-  if (Helpers.isKasu(cards)) {
-    const kasuCardsCount = cards.filter(c => {
-      return c.point === 1 || Helpers.isKikunisakazuki(c)
-    }).length;
-    points += 1;
-    points += (kasuCardsCount - 10);
+  const kasuPoints = (): number => {
+    return 1 + (kasuCardsCount(cards) - 10);
   }
 
-  if (Helpers.isTanzaku(cards)) {
-    const tanzakuCardsCount = cards.filter(c => {
-      return c.point === 5;
-    }).length;
-    points += 1;
-    points += (tanzakuCardsCount - 5);
+  const tanzakuPoints = (): number => {
+    return 1 + (tanzakuCardsCount(cards) - 5);
   }
 
-  if (Helpers.isAotan(cards) && Helpers.isAkatan(cards)) {
-    const tanzakuCardsCount = cards.filter(c => {
-      return c.point === 5;
-    }).length;
-    points += 10;
-    points += (tanzakuCardsCount - (3 + 3));
-
-  } else {
-    if (Helpers.isAotan(cards)) {
-      const tanzakuCardsCount = cards.filter(c => {
-        return c.point === 5;
-      }).length;
-      points += 5;
-      points += (tanzakuCardsCount - 3);
-    }
-
-    if (Helpers.isAkatan(cards)) {
-      const tanzakuCardsCount = cards.filter(c => {
-        return c.point === 5;
-      }).length;
-      points += 5;
-      points += (tanzakuCardsCount - 3);
-    }
+  const tanePoints = (): number => {
+    return 1 + (taneCardsCount(cards) - 5);
   }
 
-  if (Helpers.isTane(cards)) {
-    const taneCardsCount = cards.filter(c => {
-      return c.point === 10;
-    }).length;
-    points += 1;
-    points += (taneCardsCount - 5);
+  const inoshikachoPoints = (): number => {
+    return 5 + (taneCardsCount(cards) - 3);
   }
 
-  if (Helpers.isInoshikacho(cards)) {
-    const taneCardsCount = cards.filter(c => {
-      return c.point === 10;
-    }).length;
-    points += 5;
-    points += (taneCardsCount - 3);
-  }
-
-  if (Helpers.isHanamideippai(cards)) {
-    points += 5;
-  }
-
-  if (Helpers.isTsukimideippai(cards)) {
-    points += 5;
-  }
-
-  if (Helpers.isGoko(cards)) {
-    points += 10;
-  } else if (Helpers.isShiko(cards)) {
-    const isIncludeOnonoMichikaze = cards.find(c => {
-      return c.point === 20 && c.flowerType === Enums.FlowerTypes.Yanagi.name;
-    });
-    if (isIncludeOnonoMichikaze) {
-      points += 7;
+  const calculateAotanAndAkatanYakuPoints = (): number => {
+    if (Helpers.isAotan(cards) && Helpers.isAkatan(cards)) {
+      return 10 + (tanzakuCardsCount(cards) - (3 + 3));
+    } else if (Helpers.isAotan(cards) || Helpers.isAkatan(cards)) {
+      return 5 + (tanzakuCardsCount(cards) - 3);
     } else {
-      points += 8;
+      return 0;
     }
-  } else if (Helpers.isSanko(cards)) {
-    points += 5;
   }
 
-  return points;
+  const calculate20PointCardsPoints = (): number => {
+    if (Helpers.isGoko(cards)) {
+      return 10;
+    } else if (Helpers.isShiko(cards) && isIncludeOnonoMichikaze(cards)) {
+      return 7;
+    } else if (Helpers.isShiko(cards)) {
+      return 8;
+    } else if (Helpers.isSanko(cards)) {
+      return 5;
+    } else {
+      return 0;
+    }
+  }
+
+  const points: Array<number> = [
+    Helpers.isKasu(cards) ? kasuPoints() : 0,
+    Helpers.isTanzaku(cards) ? tanzakuPoints() : 0,
+    Helpers.isTane(cards) ? tanePoints() : 0,
+    calculateAotanAndAkatanYakuPoints(),
+    Helpers.isInoshikacho(cards) ? inoshikachoPoints() : 0,
+    Helpers.isHanamideippai(cards) ? 5 : 0,
+    Helpers.isTsukimideippai(cards) ? 5 : 0,
+    calculate20PointCardsPoints(),
+  ];
+
+  return points.reduce((point, summary) => point + summary);
 }

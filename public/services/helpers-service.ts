@@ -24,7 +24,7 @@ function checkMatchedBasicYaku(cards: Array<Card>, yaku: 'Kasu' | 'Tanzaku' | 'T
   return filteredCards.length >= filterCardsLength();
 }
 
-function isKikunisakazuki(card: Card): boolean {
+export function isKikunisakazuki(card: Card): boolean {
   return card.flowerType === Enums.FlowerTypes.Kiku.name && card.point === 10;
 }
 

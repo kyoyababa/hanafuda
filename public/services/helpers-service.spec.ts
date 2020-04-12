@@ -1,6 +1,5 @@
 import { Card } from './cards-service';
 import * as Helpers from './helpers-service';
-import * as Enums from '../../resources/constants/enums';
 
 describe('isKasu', () => {
   describe('カス札が10枚ある場合', () => {

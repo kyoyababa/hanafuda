@@ -56,3 +56,12 @@ export const cards: Array<Card> = [
   { name: 'カス.2', flowerType: '桐', point: 1 },
   { name: 'カス.3', flowerType: '桐', point: 1 },
 ];
+
+export function generateImageFileName(card: Card): string {
+  switch(card.point) {
+    case 1:
+      return `${card.flowerType}の${card.name}.jpg`;
+    default:
+      return `${card.flowerType}に${card.name}.jpg`;
+  }
+}

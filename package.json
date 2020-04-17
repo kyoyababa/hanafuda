@@ -12,9 +12,12 @@
     "start": "npm run clean && npm run build:dev && npm run transport && webpack-dev-server --inline"
   },
   "author": "kyoyababa",
-  "dependencies": {},
+  "dependencies": {
+    "jquery": "^3.5.0"
+  },
   "devDependencies": {
     "@types/jasmine": "^3.5.10",
+    "@types/jquery": "^3.3.35",
     "autoprefixer": "^9.7.5",
     "cpx": "^1.5.0",
     "css-loader": "^3.4.2",

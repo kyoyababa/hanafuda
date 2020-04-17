@@ -2,7 +2,33 @@
 
 // Import Templates
 @import '../resources/styles/_variables.scss';
-@import '../resources/styles/_reset.scss';
+// @import '../resources/styles/_reset.scss';
 
 // Style Guides
 @import '../resources/styles/_components.scss';
+
+$cardWidth: 80px;
+$cardMargin: 10px;
+
+ul, ol {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0;
+  list-style: none;
+  white-space: nowrap;
+
+  li {
+    margin-left: $cardMargin;
+    margin-bottom: $cardMargin;
+    width: $cardWidth;
+    white-space: normal;
+
+    img {
+      width: 100%;
+    }
+
+    div {
+      font-size: 12px;
+    }
+  }
+}

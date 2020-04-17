@@ -136,3 +136,13 @@ export function isSanko(cards: Array<Card>): boolean {
   const filteredCards = cards.filter(c => c.point === 20 && c.flowerType !== Enums.FlowerTypes.Yanagi.name);
   return filteredCards.length === 3;
 }
+
+// https://github.com/30-seconds/30-seconds-of-code/blob/master/snippets/shuffle.md
+export function fisherYatesShuffle(arr: Array<any>): Array<any> {
+  let m = arr.length;
+  while (m) {
+    const i = Math.floor(Math.random() * m--);
+    [arr[m], arr[i]] = [arr[i], arr[m]];
+  }
+  return arr;
+}

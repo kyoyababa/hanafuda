@@ -10,7 +10,7 @@
 $cardWidth: 80px;
 $cardMargin: 10px;
 
-ul, ol {
+ul {
   display: flex;
   flex-wrap: wrap;
   margin: 0;
@@ -18,9 +18,8 @@ ul, ol {
   white-space: nowrap;
 
   li {
-    margin-left: $cardMargin;
-    margin-bottom: $cardMargin;
     width: $cardWidth;
+    padding: $cardMargin;
     white-space: normal;
 
     img {
@@ -29,6 +28,24 @@ ul, ol {
 
     div {
       font-size: 12px;
+    }
+
+    &.is-matched-flower-type {
+      background-color: #D8D44B;
+
+      img {
+        opacity: 0.75;
+      }
+
+      div {
+        font-weight: bold;
+      }
+    }
+  }
+
+  &.tefuda {
+    > li {
+      cursor: pointer;
     }
   }
 }

@@ -14,11 +14,12 @@ import {
   generateCardNameFromCardElement
 } from './services/cards-service';
 import { fisherYatesShuffle } from './services/helpers-service';
+import { generateYakuByCurrentCards } from './services/actions-service';
 
 // import styles
 import './index.scss';
 
-type CardClassName = 'jsc-bafuda' | 'jsc-tefuda' | 'jsc-yamafuda';
+type CardClassName = 'jsc-bafuda' | 'jsc-tefuda' | 'jsc-yamafuda' | 'jsc-aifuda';
 
 export class Index {
   constructor(
@@ -108,13 +109,14 @@ export class Index {
 
   private handleAifuda($selectedCard: JQuery): void {
     const flowerType = $selectedCard.attr('data-flowertype');
-    $(`.jsc-bafuda[data-flowertype="${flowerType}"]`).addClass('is-selected-flower-type');
+    $(`.jsc-bafuda[data-flowertype="${flowerType}"]`).removeClass('is-matched-flower-type').addClass('is-selected-flower-type');
 
     this.moveCardToAifuda($selectedCard);
     $('.jsc-tefuda').removeClass('is-matched-flower-type');
 
     const _this = this;
-    $('.jsc-bafuda.is-selected-flower-type').click(function() {
+    $('main ul > li').click(function() {
+      if (!$(this).hasClass('jsc-bafuda') || !$(this).hasClass('is-selected-flower-type')) return;
       const $this = $(this);
       $.when(
         _this.moveBafudaCardToAifuda($this)
@@ -142,7 +144,8 @@ export class Index {
 
   private enableBafudaCardSelection(): void {
     const _this = this;
-    $('.jsc-bafuda.is-selected-flower-type').click(function() {
+    $('main ul > li').click(function() {
+      if (!$(this).hasClass('jsc-bafuda') || !$(this).hasClass('is-selected-flower-type')) return;
       _this.moveBafudaCardToAifuda($(this));
     });
   }
@@ -170,14 +173,23 @@ export class Index {
 
   private moveCardToAifuda($card: JQuery) {
     const card = convertCardElementToCard($card);
-    $('#jsi-aifuda').append(this.generateCardElement(card, ''));
+    $('#jsi-aifuda').append(this.generateCardElement(card, 'jsc-aifuda'));
     $card.remove();
+
+    this.updateCurrentYaku();
   }
 
   private moveCardToSutefuda($card: JQuery) {
     const card = convertCardElementToCard($card);
     $('#jsi-sutefuda').prepend(this.generateCardElement(card, ''));
     $card.remove();
+  }
+
+  private updateCurrentYaku(): void {
+    const cards = Array.from($('.jsc-aifuda')).map($c => {
+      return convertCardElementToCard($($c));
+    });
+    console.log(generateYakuByCurrentCards(cards));
   }
 }
 

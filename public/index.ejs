@@ -14,22 +14,25 @@
 <% include ./public/components/header/header.ejs %>
 
 <main>
-  <h1>花札（初心者の練習用）</h1>
-  <hr />
-  <h2>場札</h2>
-  <ul id="jsi-bafuda"></ul>
-  <hr />
-  <h2>合札</h2>
-  <ul id="jsi-aifuda"></ul>
-  <hr />
-  <h2>手札</h2>
-  <ul id="jsi-tefuda" class="tefuda"></ul>
-  <hr />
-  <h2>捨札</h2>
-  <ul id="jsi-sutefuda"></ul>
-  <hr />
-  <h2>山札</h2>
-  <ul id="jsi-yamafuda"></ul>
+  <div>
+    <h1>花札（初心者練習用）</h1>
+    <hr />
+    <h2>場札</h2>
+    <ul id="jsi-bafuda" class="bafuda"></ul>
+    <hr />
+    <h2>合札</h2>
+    <ul id="jsi-aifuda"></ul>
+    <hr />
+    <h2>手札</h2>
+    <ul id="jsi-tefuda" class="tefuda"></ul>
+  </div>
+  <div class="yamafuda-wrapper">
+    <h2>山札</h2>
+    <ul id="jsi-yamafuda"></ul>
+    <hr />
+    <h2>捨札</h2>
+    <ul id="jsi-sutefuda" class="sutefuda"></ul>
+  </div>
 </main>
 
 <% include ./public/components/footer/footer.ejs %>

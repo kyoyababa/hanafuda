@@ -10,15 +10,36 @@
 $cardWidth: 80px;
 $cardMargin: 10px;
 
+main {
+  display: flex;
+  flex-wrap: wrap;
+  width: 880px + 150px;
+  margin: 0 auto;
+
+  > div {
+    width: 880px;
+    padding-right: 20px;
+  }
+
+  > .yamafuda-wrapper {
+    width: 130px;
+    margin-top: 88px;
+    padding-right: 0;
+  }
+}
+
 ul {
   display: flex;
   flex-wrap: wrap;
   margin: 0;
+  padding-left: 0;
   list-style: none;
   white-space: nowrap;
 
   li {
     width: $cardWidth;
+    margin-left: $cardMargin;
+    margin-bottom: $cardMargin;
     padding: $cardMargin;
     white-space: normal;
 
@@ -30,7 +51,8 @@ ul {
       font-size: 12px;
     }
 
-    &.is-matched-flower-type {
+    &.is-matched-flower-type,
+    &.is-selected-flower-type {
       background-color: #D8D44B;
 
       img {
@@ -42,10 +64,46 @@ ul {
       }
     }
   }
+}
 
-  &.tefuda {
+.yamafuda-wrapper {
+  > ul {
+    position: relative;
+
     > li {
-      cursor: pointer;
+      position: absolute;
+      top: 0;
+      left: 20px;
+
+      &:nth-child(1) {
+        > div {
+          background-color: rgba(255,255,255, 0.75);
+        }
+      }
+
+      &:nth-child(n + 2) {
+        > div {
+          display: none;
+        }
+      }
+
+      @for $i from 1 through (48 - 8 - 8) {
+        &:nth-child(#{$i}) {
+          z-index: 12 + 1 - $i;
+          top: 4px * $i;
+          left: 4px * $i;
+        }
+      }
+    }
+  }
+
+  > hr {
+    margin-top: 280px;
+  }
+
+  > .sutefuda {
+    > div {
+      display: none;
     }
   }
 }

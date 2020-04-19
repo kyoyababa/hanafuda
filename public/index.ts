@@ -13,6 +13,8 @@ import { fisherYatesShuffle } from './services/helpers-service';
 // import styles
 import './index.scss';
 
+type CardClassName = 'jsc-bafuda' | 'jsc-tefuda';
+
 export class Index {
   constructor(
     header: Header,
@@ -21,9 +23,9 @@ export class Index {
     this.prepareCards();
   }
 
-  private generateCardElement(card: Card): string {
+  private generateCardElement(card: Card, className: CardClassName | ''): string {
     return `
-      <li data-flowerType="${card.flowerType}">
+      <li class="${className}" data-flowerType="${card.flowerType}">
         <img src="/assets/images/${generateImageFileName(card)}" />
         <div>
           ${card.flowerType} - ${card.name}<br />
@@ -43,34 +45,93 @@ export class Index {
     shuffledCards.forEach((c: Card, i: number) => {
       if (i < 8) {
         // 場八
-        $bafuda.append(this.generateCardElement(c));
+        $bafuda.append(this.generateCardElement(c, 'jsc-bafuda'));
       } else if (i < 8 + 8) {
         // 手八
-        $tefuda.append(this.generateCardElement(c));
-      } else if (i < 8 + 8 + 8) {
-        // 相手の手札になるので、これらのカードは何もしない
+        $tefuda.append(this.generateCardElement(c, 'jsc-tefuda'));
       } else {
-        $yamafuda.append(this.generateCardElement(c));
+        $yamafuda.append(this.generateCardElement(c, ''));
       }
     });
 
+    this.enableCardHoveredAction();
     this.enableCardSelection();
   }
 
-  private enableCardSelection(): void {
-    $('#jsi-tefuda > li').hover(function() {
-      const flowerType = $(this).attr('data-flowerType');
+  private enableCardHoveredAction(): void {
+    $('main ul > li').hover(function() {
+      if (!$(this).hasClass('jsc-tefuda')) return;
+      if ($('.jsc-bafuda').hasClass('is-selected-flower-type')) return;
 
+      const flowerType = $(this).attr('data-flowerType');
       if (!flowerType) return;
 
-      $('#jsi-bafuda > li, #jsi-tefuda > li')
+      $('.jsc-bafuda, .jsc-tefuda')
         .removeClass('is-matched-flower-type');
-      $(`#jsi-bafuda > li[data-flowerType="${flowerType}"], #jsi-tefuda > li[data-flowerType="${flowerType}"]`)
+      $(`.jsc-bafuda[data-flowerType="${flowerType}"], .jsc-tefuda[data-flowerType="${flowerType}"]`)
         .addClass('is-matched-flower-type');
 
     }, function() {
-      $('#jsi-bafuda > li, #jsi-tefuda > li')
+      $('.jsc-bafuda, .jsc-tefuda')
         .removeClass('is-matched-flower-type');
+    });
+  }
+
+  private enableCardSelection(): void {
+    $('main ul > li').click(function() {
+      if (!$(this).hasClass('jsc-tefuda')) return;
+      if ($('.jsc-bafuda').hasClass('is-selected-flower-type')) return;
+
+      const hasAifuda = $('.jsc-bafuda').hasClass('is-matched-flower-type');
+
+      function handleSutefuda($selectedCard: JQuery): void {
+        if (!confirm('場に同じ月の札がないため捨て札となります。\nよろしいですか？')) return;
+        $selectedCard
+          .removeClass('is-matched-flower-type')
+          .clone(false)
+          .appendTo('#jsi-sutefuda');
+        $selectedCard
+          .remove();
+      }
+
+      function handleAifuda($selectedCard: JQuery): void {
+        const flowerType = $selectedCard.attr('data-flowerType');
+
+        $(`.jsc-bafuda[data-flowerType="${flowerType}"]`)
+          .addClass('is-selected-flower-type');
+
+        function moveSelectedCardToAifuda() {
+          $selectedCard
+            .clone(false)
+            .appendTo('#jsi-aifuda')
+          $selectedCard
+            .remove();
+        }
+
+        moveSelectedCardToAifuda();
+
+        $('.jsc-bafuda.is-selected-flower-type').click(function() {
+          const $selectedBafudaCard = $(this);
+
+          function moveBafudaCardToAifuda() {
+            $('.jsc-bafuda.is-selected-flower-type')
+              .removeClass('is-selected-flower-type');
+            $selectedBafudaCard
+              .clone(false)
+              .appendTo('#jsi-aifuda');
+            $selectedBafudaCard
+              .remove();
+          }
+
+          moveBafudaCardToAifuda();
+        });
+      }
+
+      if (!hasAifuda) {
+        handleSutefuda($(this));
+      } else {
+        handleAifuda($(this));
+      }
     });
   }
 }

@@ -81,116 +81,144 @@ export class Index {
   }
 
   private enableCardSelection(): void {
-    const _this = this;
-
-    $('main ul > li').click(function() {
-      if (!$(this).hasClass('jsc-tefuda')) return;
-      if ($('.jsc-bafuda').hasClass('is-selected-flower-type')) return;
-
-      const hasAifuda = $('.jsc-bafuda').hasClass('is-matched-flower-type');
-      if (!hasAifuda) {
-        _this.handleSutefuda($(this));
-      } else {
-        _this.handleAifuda($(this));
-      }
-    });
+  //   const _this = this;
+  //
+  //   $('main ul > li').click(function() {
+  //     if (!$(this).hasClass('jsc-tefuda')) return;
+  //     if ($('.jsc-bafuda').hasClass('is-selected-flower-type')) return;
+  //
+  //     const hasAifuda = $('.jsc-bafuda').hasClass('is-matched-flower-type');
+  //     if (!hasAifuda) {
+  //       _this.handleSutefuda($(this));
+  //     } else {
+  //       _this.handleAifuda($(this));
+  //     }
+  //   });
   }
-
-  private handleSutefuda($selectedCard: JQuery): void {
-    if (!confirm('場に同じ月の札がないため捨札となります。\nよろしいですか？')) return;
-
-    const _this = this;
-    $.when(
-      _this.moveTefudaCardToSutefuda($selectedCard)
-    ).then(() => {
-      _this.addBafudaCardFromYamafuda();
-    });
-  }
-
-  private handleAifuda($selectedCard: JQuery): void {
-    const flowerType = $selectedCard.attr('data-flowertype');
-    $(`.jsc-bafuda[data-flowertype="${flowerType}"]`).removeClass('is-matched-flower-type').addClass('is-selected-flower-type');
-
-    this.moveCardToAifuda($selectedCard);
-    $('.jsc-tefuda').removeClass('is-matched-flower-type');
-
-    const _this = this;
-    $('main ul > li').click(function() {
-      if (!$(this).hasClass('jsc-bafuda') || !$(this).hasClass('is-selected-flower-type')) return;
-      const $this = $(this);
-      $.when(
-        _this.moveBafudaCardToAifuda($this)
-      ).then(() => {
-        _this.addBafudaCardFromYamafuda();
-      });
-    });
-  }
-
-  private moveTefudaCardToSutefuda($selectedCard: JQuery): void {
-    this.moveCardToSutefuda($selectedCard);
-    $('.jsc-tefuda').removeClass('is-matched-flower-type');
-  }
-
-  private moveYamafudaCardToSutefuda($yamafuda: JQuery): void {
-    alert(`場に同じ月の札がないため、${generateCardNameFromCardElement($yamafuda)}を山札から捨札に移動します。`);
-    this.moveCardToSutefuda($yamafuda);
-  }
-
-  private movePairOfYamafudaAndTefuda($yamafuda: JQuery): void {
-    alert(`${$yamafuda.attr('data-flowertype')}の札が場札にあるため、${generateCardNameFromCardElement($yamafuda)}を山札から合札に移動します。`);
-    this.moveCardToAifuda($yamafuda);
-    this.enableBafudaCardSelection();
-  }
-
-  private enableBafudaCardSelection(): void {
-    const _this = this;
-    $('main ul > li').click(function() {
-      if (!$(this).hasClass('jsc-bafuda') || !$(this).hasClass('is-selected-flower-type')) return;
-      _this.moveBafudaCardToAifuda($(this));
-    });
-  }
-
-  private moveBafudaCardToAifuda($selectedCard: JQuery): void {
-    this.moveCardToAifuda($selectedCard);
-    $('.jsc-bafuda').removeClass('is-selected-flower-type');
-  }
-
-  private addBafudaCardFromYamafuda(): void {
-    const $yamafuda = $('.jsc-yamafuda').eq(0);
-    $yamafuda.addClass('is-selected-flower-type');
-
-    const flowerType = $yamafuda.attr('data-flowertype');
-    $(`.jsc-bafuda[data-flowertype="${flowerType}"]`).addClass('is-selected-flower-type');
-
-    const _this = this;
-    const hasAifuda = $('.jsc-bafuda').hasClass('is-selected-flower-type');
-    if (!hasAifuda) {
-      _this.moveYamafudaCardToSutefuda($yamafuda);
-    } else {
-      _this.movePairOfYamafudaAndTefuda($yamafuda);
-    }
-  }
-
-  private moveCardToAifuda($card: JQuery) {
-    const card = convertCardElementToCard($card);
-    $('#jsi-aifuda').append(this.generateCardElement(card, 'jsc-aifuda'));
-    $card.remove();
-
-    this.updateCurrentYaku();
-  }
-
-  private moveCardToSutefuda($card: JQuery) {
-    const card = convertCardElementToCard($card);
-    $('#jsi-sutefuda').prepend(this.generateCardElement(card, ''));
-    $card.remove();
-  }
-
-  private updateCurrentYaku(): void {
-    const cards = Array.from($('.jsc-aifuda')).map($c => {
-      return convertCardElementToCard($($c));
-    });
-    console.log(generateYakuByCurrentCards(cards));
-  }
+  
+  // private handleSutefuda($selectedCard: JQuery): void {
+  //   if (!confirm('場に同じ月の札がないため捨札となります。\nよろしいですか？')) return;
+  //
+  //   const _this = this;
+  //   $.when(
+  //     _this.moveTefudaCardToSutefuda($selectedCard)
+  //   ).then(() => {
+  //     $.when(
+  //       _this.pickCardUpFromYamafuda()
+  //     ).then(() => {
+  //       const hasAifuda = $('.jsc-bafuda').hasClass('is-selected-flower-type');
+  //       const $yamafuda = $('.jsc-yamafuda').eq(0);
+  //       if (!hasAifuda) {
+  //         _this.moveYamafudaToSutefuda($yamafuda);
+  //       } else {
+  //         _this.moveYamafudaToBafuda($yamafuda);
+  //
+  //         $('main ul > li').click(function() {
+  //           if (!$(this).hasClass('jsc-bafuda') || !$(this).hasClass('is-selected-flower-type')) return;
+  //           _this.moveBafudaCardToAifuda($(this));
+  //         });
+  //       }
+  //     });
+  //   });
+  // }
+  //
+  // private handleAifuda($selectedCard: JQuery): void {
+  //   this.moveCardToAifuda($selectedCard);
+  //   $('.jsc-tefuda').removeClass('is-matched-flower-type');
+  //
+  //   const flowerType = $selectedCard.attr('data-flowertype');
+  //   const $bafudaCardsWithSameFlower = $(`.jsc-bafuda[data-flowertype="${flowerType}"]`);
+  //   $bafudaCardsWithSameFlower.removeClass('is-matched-flower-type').addClass('is-selected-flower-type');
+  //
+  //   const _this = this;
+  //   $('main ul > li').click(function() {
+  //     if (!$(this).hasClass('jsc-bafuda')) return;
+  //     if (!$(this).hasClass('is-selected-flower-type')) return;
+  //
+  //     const $this = $(this);
+  //     $.when(
+  //       _this.moveBafudaCardToAifuda($this),
+  //       $('.jsc-bafuda').removeClass('is-selected-flower-type')
+  //     ).then(() => {
+  //       $.when(
+  //         _this.pickCardUpFromYamafuda(),
+  //         $bafudaCardsWithSameFlower.removeClass('is-selected-flower-type').addClass('is-matched-with-yamafuda')
+  //       ).then(() => {
+  //         const hasAifuda = $('.jsc-bafuda').hasClass('is-matched-with-yamafuda');
+  //         const $yamafuda = $('.jsc-yamafuda').eq(0);
+  //         if (!hasAifuda) {
+  //           _this.moveYamafudaToSutefuda($yamafuda);
+  //         } else {
+  //           _this.moveYamafudaToBafuda($yamafuda);
+  //
+  //           $('main ul > li').click(function() {
+  //             if (!$(this).hasClass('jsc-bafuda')) return;
+  //             if (!$(this).hasClass('is-matched-with-yamafuda')) return;
+  //
+  //             _this.moveCardToAifuda($(this));
+  //             $bafudaCardsWithSameFlower.removeClass('is-matched-with-yamafuda');
+  //           });
+  //         }
+  //       });
+  //     });
+  //   });
+  // }
+  //
+  // private moveYamafudaToSutefuda($yamafuda: JQuery): void {
+  //   alert(`場に同じ月の札がないため、${generateCardNameFromCardElement($yamafuda)}を山札から捨札に移動します。`);
+  //   this.moveCardToSutefuda($yamafuda);
+  // }
+  //
+  // private moveYamafudaToBafuda($yamafuda: JQuery): void {
+  //   alert(`${$yamafuda.attr('data-flowertype')}の札が場札にあるため、${generateCardNameFromCardElement($yamafuda)}を山札から合札に移動します。`);
+  //   this.moveCardToAifuda($yamafuda);
+  // }
+  //
+  // private moveTefudaCardToSutefuda($selectedCard: JQuery): void {
+  //   $('.jsc-tefuda').removeClass('is-matched-flower-type');
+  //   this.moveCardToSutefuda($selectedCard);
+  // }
+  //
+  // private moveBafudaCardToAifuda($selectedCard: JQuery): void {
+  //   $('.jsc-bafuda').removeClass('is-selected-flower-type');
+  //   this.moveCardToAifuda($selectedCard);
+  // }
+  //
+  // private pickCardUpFromYamafuda(): void {
+  //   const $yamafuda = $('.jsc-yamafuda').eq(0);
+  //   $yamafuda.addClass('is-selected-flower-type');
+  //
+  //   const flowerType = $yamafuda.attr('data-flowertype');
+  //   const $bafudaCardsWithSameFlower = $(`.jsc-bafuda[data-flowertype="${flowerType}"]`);
+  //   $bafudaCardsWithSameFlower.addClass('is-selected-flower-type');
+  // }
+  //
+  // private moveCardToAifuda($card: JQuery) {
+  //   const card = convertCardElementToCard($card);
+  //   $('#jsi-aifuda').append(this.generateCardElement(card, 'jsc-aifuda'));
+  //   $card.remove();
+  //
+  //   this.updateCurrentYaku();
+  // }
+  //
+  // private moveCardToSutefuda($card: JQuery) {
+  //   const card = convertCardElementToCard($card);
+  //   $('#jsi-sutefuda').prepend(this.generateCardElement(card, ''));
+  //   $card.remove();
+  // }
+  //
+  // private updateCurrentYaku(): void {
+  //   $('#jsi-dekiyaku').empty().append(this.generateDekiyakuElements());
+  // }
+  //
+  // private generateDekiyakuElements(): string {
+  //   const cards = Array.from($('.jsc-aifuda')).map($c => convertCardElementToCard($($c)));
+  //   const yakus = generateYakuByCurrentCards(cards).map(yaku => {
+  //     const yakuEnums = Enums.yakusValues.find(yakuValue => yakuValue.code === yaku);
+  //     if (yakuEnums) return yakuEnums.name;
+  //   });
+  //   return yakus.map(yaku => `<li>${yaku}</li>`).join('');
+  // }
 }
 
 new Index(

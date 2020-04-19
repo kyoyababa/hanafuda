@@ -115,3 +115,15 @@ ul {
     }
   }
 }
+
+.dekiyaku {
+  margin-top: -15px;
+
+  > li {
+    width: auto;
+    padding: 2px 6px;
+    background-color: lightblue;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+}

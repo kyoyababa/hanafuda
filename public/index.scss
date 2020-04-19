@@ -7,8 +7,16 @@
 // Style Guides
 @import '../resources/styles/_components.scss';
 
-$cardWidth: 80px;
+$cardWidth: 70px;
 $cardMargin: 10px;
+
+body {
+  padding: 0;
+}
+
+h1 {
+  margin-top: 0;
+}
 
 main {
   display: flex;
@@ -39,7 +47,6 @@ ul {
   li {
     width: $cardWidth;
     margin-left: $cardMargin;
-    margin-bottom: $cardMargin;
     padding: $cardMargin;
     white-space: normal;
 
@@ -49,6 +56,7 @@ ul {
 
     div {
       font-size: 12px;
+      white-space: nowrap;
     }
 
     &.is-matched-flower-type,

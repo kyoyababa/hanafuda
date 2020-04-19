@@ -65,3 +65,19 @@ export function generateImageFileName(card: Card): string {
       return `${card.flowerType}に${card.name}.jpg`;
   }
 }
+
+export function convertCardElementToCard($card: JQuery): Card {
+  const flowerType = <FlowerType>$card.attr('data-flowertype');
+  const name = <string>$card.attr('data-name');
+  const point = <PointType>parseInt(<string>$card.attr('data-point'), 10);
+
+  return {
+    flowerType,
+    name,
+    point
+  };
+}
+
+export function generateCardNameFromCardElement($card: JQuery): string {
+  return `${$card.attr('data-flowertype')} - ${$card.attr('data-name')}`;
+}

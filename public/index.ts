@@ -2,18 +2,23 @@ import * as $ from 'jquery';
 
 // import functions via scripts resources
 import * as Enums from "../resources/constants/enums";
-import { FlowerType } from './services/cards-service';
 
 // import components
 import { Header } from './components/header/header';
 import { Footer } from './components/footer/footer';
-import { Card, cards, generateImageFileName } from './services/cards-service';
+import {
+  Card,
+  cards,
+  generateImageFileName,
+  convertCardElementToCard,
+  generateCardNameFromCardElement
+} from './services/cards-service';
 import { fisherYatesShuffle } from './services/helpers-service';
 
 // import styles
 import './index.scss';
 
-type CardClassName = 'jsc-bafuda' | 'jsc-tefuda';
+type CardClassName = 'jsc-bafuda' | 'jsc-tefuda' | 'jsc-yamafuda';
 
 export class Index {
   constructor(
@@ -25,7 +30,7 @@ export class Index {
 
   private generateCardElement(card: Card, className: CardClassName | ''): string {
     return `
-      <li class="${className}" data-flowerType="${card.flowerType}">
+      <li class="${className}" data-flowertype="${card.flowerType}" data-name="${card.name}" data-point="${card.point}">
         <img src="/assets/images/${generateImageFileName(card)}" />
         <div>
           ${card.flowerType} - ${card.name}<br />
@@ -50,7 +55,8 @@ export class Index {
         // 手八
         $tefuda.append(this.generateCardElement(c, 'jsc-tefuda'));
       } else {
-        $yamafuda.append(this.generateCardElement(c, ''));
+        // 山札を積む
+        $yamafuda.append(this.generateCardElement(c, 'jsc-yamafuda'));
       }
     });
 
@@ -63,76 +69,118 @@ export class Index {
       if (!$(this).hasClass('jsc-tefuda')) return;
       if ($('.jsc-bafuda').hasClass('is-selected-flower-type')) return;
 
-      const flowerType = $(this).attr('data-flowerType');
-      if (!flowerType) return;
-
-      $('.jsc-bafuda, .jsc-tefuda')
-        .removeClass('is-matched-flower-type');
-      $(`.jsc-bafuda[data-flowerType="${flowerType}"], .jsc-tefuda[data-flowerType="${flowerType}"]`)
-        .addClass('is-matched-flower-type');
+      const flowerType = $(this).attr('data-flowertype');
+      $(`.jsc-bafuda[data-flowertype="${flowerType}"]`).addClass('is-matched-flower-type');
+      $(`.jsc-tefuda[data-flowertype="${flowerType}"]`).addClass('is-matched-flower-type');
 
     }, function() {
-      $('.jsc-bafuda, .jsc-tefuda')
-        .removeClass('is-matched-flower-type');
+      $('.jsc-bafuda').removeClass('is-matched-flower-type');
+      $('.jsc-tefuda').removeClass('is-matched-flower-type');
     });
   }
 
   private enableCardSelection(): void {
+    const _this = this;
+
     $('main ul > li').click(function() {
       if (!$(this).hasClass('jsc-tefuda')) return;
       if ($('.jsc-bafuda').hasClass('is-selected-flower-type')) return;
 
       const hasAifuda = $('.jsc-bafuda').hasClass('is-matched-flower-type');
-
-      function handleSutefuda($selectedCard: JQuery): void {
-        if (!confirm('場に同じ月の札がないため捨て札となります。\nよろしいですか？')) return;
-        $selectedCard
-          .removeClass('is-matched-flower-type')
-          .clone(false)
-          .appendTo('#jsi-sutefuda');
-        $selectedCard
-          .remove();
-      }
-
-      function handleAifuda($selectedCard: JQuery): void {
-        const flowerType = $selectedCard.attr('data-flowerType');
-
-        $(`.jsc-bafuda[data-flowerType="${flowerType}"]`)
-          .addClass('is-selected-flower-type');
-
-        function moveSelectedCardToAifuda() {
-          $selectedCard
-            .clone(false)
-            .appendTo('#jsi-aifuda')
-          $selectedCard
-            .remove();
-        }
-
-        moveSelectedCardToAifuda();
-
-        $('.jsc-bafuda.is-selected-flower-type').click(function() {
-          const $selectedBafudaCard = $(this);
-
-          function moveBafudaCardToAifuda() {
-            $('.jsc-bafuda.is-selected-flower-type')
-              .removeClass('is-selected-flower-type');
-            $selectedBafudaCard
-              .clone(false)
-              .appendTo('#jsi-aifuda');
-            $selectedBafudaCard
-              .remove();
-          }
-
-          moveBafudaCardToAifuda();
-        });
-      }
-
       if (!hasAifuda) {
-        handleSutefuda($(this));
+        _this.handleSutefuda($(this));
       } else {
-        handleAifuda($(this));
+        _this.handleAifuda($(this));
       }
     });
+  }
+
+  private handleSutefuda($selectedCard: JQuery): void {
+    if (!confirm('場に同じ月の札がないため捨札となります。\nよろしいですか？')) return;
+
+    const _this = this;
+    $.when(
+      _this.moveTefudaCardToSutefuda($selectedCard)
+    ).then(() => {
+      _this.addBafudaCardFromYamafuda();
+    });
+  }
+
+  private handleAifuda($selectedCard: JQuery): void {
+    // const flowerType = $selectedCard.attr('data-flowertype');
+    // $(`.jsc-bafuda[data-flowertype="${flowerType}"]`).addClass('is-selected-flower-type');
+    //
+    // function moveSelectedCardToAifuda() {
+    //   const card = convertCardElementToCard($selectedCard);
+    //   $('#jsi-aifuda').append(_this.generateCardElement(card, ''));
+    //   $selectedCard.remove();
+    // }
+    //
+    // moveSelectedCardToAifuda();
+    //
+    // $('.jsc-bafuda.is-selected-flower-type').click(function() {
+    //   const $selectedBafudaCard = $(this);
+    //
+    //   function moveBafudaCardToAifuda() {
+    //     $('.jsc-bafuda.is-selected-flower-type').removeClass('is-selected-flower-type');
+    //
+    //     const card = convertCardElementToCard($selectedBafudaCard);
+    //     $('#jsi-aifuda').append(_this.generateCardElement(card, ''));
+    //     $selectedBafudaCard.remove();
+    //   }
+    //
+    //   moveBafudaCardToAifuda();
+    // });
+  }
+
+  private moveTefudaCardToSutefuda($selectedCard: JQuery): void {
+    const card = convertCardElementToCard($selectedCard);
+    $('#jsi-sutefuda').prepend(this.generateCardElement(card, ''));
+    $selectedCard.remove();
+    $('.jsc-tefuda').removeClass('is-matched-flower-type');
+  }
+
+  private moveYamafudaCardToSutefuda($yamafuda: JQuery): void {
+    alert(`場に同じ月の札がないため、${generateCardNameFromCardElement($yamafuda)}を山札から捨札に移動します。`);
+
+    const card = convertCardElementToCard($yamafuda);
+    $('#jsi-sutefuda').prepend(this.generateCardElement(card, ''));
+    $yamafuda.remove();
+  }
+
+  private movePairOfYamafudaAndTefuda($yamafuda: JQuery): void {
+    alert(`${$yamafuda.attr('data-flowertype')}の札が場札にあるため、${generateCardNameFromCardElement($yamafuda)}を山札から合札に移動します。`);
+    const card = convertCardElementToCard($yamafuda);
+    $('#jsi-aifuda').append(this.generateCardElement(card, ''));
+    $yamafuda.remove();
+
+    this.enableBafudaCardSelection();
+  }
+
+  private enableBafudaCardSelection(): void {
+    const _this = this;
+    $('.jsc-bafuda.is-selected-flower-type').click(function() {
+      const _card = convertCardElementToCard($(this));
+      $('#jsi-aifuda').append(_this.generateCardElement(_card, ''));
+      $(this).remove();
+      $('.jsc-bafuda').removeClass('is-selected-flower-type');
+    });
+  }
+
+  private addBafudaCardFromYamafuda(): void {
+    const $yamafuda = $('.jsc-yamafuda').eq(0);
+    $yamafuda.addClass('is-selected-flower-type');
+
+    const flowerType = $yamafuda.attr('data-flowertype');
+    $(`.jsc-bafuda[data-flowertype="${flowerType}"]`).addClass('is-selected-flower-type');
+
+    const _this = this;
+    const hasAifuda = $('.jsc-bafuda').hasClass('is-selected-flower-type');
+    if (!hasAifuda) {
+      _this.moveYamafudaCardToSutefuda($yamafuda);
+    } else {
+      _this.movePairOfYamafudaAndTefuda($yamafuda);
+    }
   }
 }
 

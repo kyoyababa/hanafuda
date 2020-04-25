@@ -10,7 +10,7 @@ type CardClassName = 'jsc-bafuda' | 'jsc-tefuda' | 'jsc-yamafuda' | 'jsc-aifuda'
 export function generateCardElement(card: Card, className: CardClassName | ''): string {
   return `
     <li class="${className}" data-flowertype="${card.flowerType}" data-name="${card.name}" data-point="${card.point}">
-      <img src="/assets/images/${generateImageFileName(card)}" />
+      <img src="./assets/images/${generateImageFileName(card)}" />
       <div>
         ${card.flowerType} - ${card.name}<br />
         ${card.point}pt

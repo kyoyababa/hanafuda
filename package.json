@@ -7,9 +7,10 @@
     "clean": "rm -rf ./**/.DS_Store npm-debug.log dist",
     "clean-install": "rm -rf ./node_modules && npm install",
     "transport": "(cpx \"public/assets/images/**/*\" \"dist/assets/images\")",
-    "build:prod": "webpack --mode production && npm run transport",
+    "build:prod": "webpack --mode production && npm run transport && npm run replace-uri",
     "build:dev": "webpack --mode development && npm run transport",
-    "start": "npm run clean && npm run build:dev && webpack-dev-server --inline"
+    "start": "npm run clean && npm run build:dev && webpack-dev-server --inline",
+    "replace-uri": "replace './assets' '/hanafuda/dist/assets' dist/index.html dist/assets/scripts/bundle.js"
   },
   "author": "kyoyababa",
   "dependencies": {
@@ -39,6 +40,7 @@
     "postcss-loader": "^3.0.0",
     "postcss-url": "^8.0.0",
     "progress-bar-webpack-plugin": "^2.1.0",
+    "replace": "^1.2.0",
     "sass": "^1.26.3",
     "sass-loader": "^8.0.2",
     "style-loader": "^1.1.3",
